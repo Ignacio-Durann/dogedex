@@ -1,14 +1,16 @@
 package com.app.dogedex.doglist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.dogedex.Dog
+import com.app.dogedex.api.response.Dog
 import kotlinx.coroutines.launch
 
 class DogListViewModel : ViewModel() {
     private val _dogList = MutableLiveData<List<Dog>>()
+
 
     val dogList: LiveData<List<Dog>>
             get() = _dogList
@@ -21,8 +23,14 @@ class DogListViewModel : ViewModel() {
     }
 
     private fun downloadDogs(){
-        viewModelScope.launch {
-            _dogList.value = dogRepository.downloadDogs()
+        viewModelScope.launch() {
+            try {
+                _dogList.value = dogRepository.downloadDogs()
+            }catch (e: Exception){
+                Log.e("DogListViewModel", "Error al descargar la lista de perros: " + e)
+
+            }
+
         }
     }
 }

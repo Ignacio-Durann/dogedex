@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.dogedex.Dog
-import com.app.dogedex.R
 import com.app.dogedex.databinding.ActivityDogListBinding
 
 class DogListActivity : AppCompatActivity() {
@@ -13,19 +11,22 @@ class DogListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Infla el layout usando View Binding
         val binding = ActivityDogListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configura el RecyclerView
         val recycler = binding.rvDogRecycler
         recycler.layoutManager = LinearLayoutManager(this)
 
-        val adapter = DogAdapter()
-        recycler.adapter = adapter
-        dogListViewModel.dogList.observe(this){dogList ->
-            adapter.submitList(dogList)
+        // Configura el Adaptador del RecyclerView
+        val adapterD = DogAdapter()
+        recycler.adapter = adapterD
+
+        // Observa el LiveData de dogList para actualizar la lista en el adaptador
+        dogListViewModel.dogList.observe(this) { dogList ->
+            adapterD.submitList(dogList)
         }
-
     }
-
-
 }

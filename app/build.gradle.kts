@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.leanback)
     implementation(libs.retrofit)
     implementation(libs.retrofitJson)
+    implementation(libs.moshiRetrofit)
+    implementation(libs.interceptorLoggin)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

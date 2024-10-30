@@ -13,8 +13,10 @@ org-jetbrains-kotlin-android = "1.8.0"
 navigation-fragment-ktx = "2.5.3"
 navigation-ui-ktx = "2.5.3"
 leanback = "1.0.0"
-retrofitVersion ="2.9.0"
-retrofitJsonVersion ="2.9.0"
+retrofitVersion = "2.9.0"
+retrofitJsonVersion = "2.9.0"
+moshiRetrofit = "2.9.0"
+interceptorLoggin = "4.9.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +32,8 @@ navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx",
 androidx-leanback = { group = "androidx.leanback", name = "leanback", version.ref = "leanback" }
 retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
 retrofitJson = {group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitJsonVersion" }
+moshiRetrofit = {group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "moshiRetrofit" }
+interceptorLoggin = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "interceptorLoggin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
