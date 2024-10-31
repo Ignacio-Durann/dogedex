@@ -1,7 +1,9 @@
 package com.app.dogedex.api.response
-
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Dog(
 val id: Long,
 val index: Int,
@@ -19,4 +21,4 @@ val weightFemale: String,
 val createdAt: String,
 val updateAp: String,
 val mlId: String,
-)
+) : Parcelable

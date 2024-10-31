@@ -1,10 +1,13 @@
 package com.app.dogedex.doglist
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.dogedex.databinding.ActivityDogListBinding
+import com.app.dogedex.dogdetail.DogDetailActivity
+import com.app.dogedex.dogdetail.DogDetailActivity.Companion.DOG_KEY
 
 class DogListActivity : AppCompatActivity() {
     private val dogListViewModel: DogListViewModel by viewModels()
@@ -22,6 +25,13 @@ class DogListActivity : AppCompatActivity() {
 
         // Configura el Adaptador del RecyclerView
         val adapterD = DogAdapter()
+        //se agrega el click al nombre
+        adapterD.setOnItemClickListener {
+            //pasasr dog a dogDetailActivity
+            val intent = Intent(this, DogDetailActivity::class.java)
+            intent.putExtra(DOG_KEY, it)
+            startActivity(intent)
+        }
         recycler.adapter = adapterD
 
         // Observa el LiveData de dogList para actualizar la lista en el adaptador

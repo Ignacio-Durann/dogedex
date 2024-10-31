@@ -18,6 +18,12 @@ class DogAdapter : ListAdapter<Dog, DogAdapter.DogViewHolder>(DiffCallback) {
             return oldItem.id == newItem.id
         }
     }
+
+
+    private var onItemClickListener: ((Dog) -> Unit)? = null
+    fun setOnItemClickListener(onItemClicklistener: (Dog) -> Unit){
+        this.onItemClickListener = onItemClicklistener
+    }
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
         val binding = DogListItemBinding.inflate(LayoutInflater.from(parent.context))
@@ -33,6 +39,9 @@ class DogAdapter : ListAdapter<Dog, DogAdapter.DogViewHolder>(DiffCallback) {
     inner class DogViewHolder(private val binding: DogListItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(dog: Dog){
             binding.etDogName.text = dog.nameEs
+            binding.etDogName.setOnClickListener{
+                onItemClickListener?.invoke(dog)
+            }
         }
     }
 }

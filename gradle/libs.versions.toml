@@ -17,6 +17,7 @@ retrofitVersion = "2.9.0"
 retrofitJsonVersion = "2.9.0"
 moshiRetrofit = "2.9.0"
 interceptorLoggin = "4.9.3"
+kotlin-parcelize = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,4 +41,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
+kotlin-parcelize = { id = "kotlin-parcelize", version.ref = "kotlin-parcelize" }
 
