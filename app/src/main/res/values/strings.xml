@@ -10,4 +10,11 @@
     <string name="dog_life_expentancy_format">%s years</string>
     <string name="unknown_host_exception_error">No hay Internet</string>
     <string name="unknown_error">Error al descargar los datos, intenta nuevamente</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="do_not_have_an_account">Do not have account</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up">Sign up</string>
 </resources>

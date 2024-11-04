@@ -1,4 +1,11 @@
 pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == "androidx.navigation.safeargs") {
+                useModule("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.1")
+            }
+        }
+    }
     repositories {
         google {
             content {
