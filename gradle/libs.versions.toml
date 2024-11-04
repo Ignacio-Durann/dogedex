@@ -18,7 +18,7 @@ retrofitJsonVersion = "2.9.0"
 moshiRetrofit = "2.9.0"
 interceptorLoggin = "4.9.3"
 kotlin-parcelize = "1.8.0"
-coil-compose = "3.0.0"
+coil-compose = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,8 +36,7 @@ retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "
 retrofitJson = {group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitJsonVersion" }
 moshiRetrofit = {group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "moshiRetrofit" }
 interceptorLoggin = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "interceptorLoggin" }
-coil-compose = {group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil-compose" }
-coil-network-okhttp = {group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil-compose" }
+coil-compose = {group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 
 
 [plugins]

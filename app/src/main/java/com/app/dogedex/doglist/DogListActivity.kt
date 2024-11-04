@@ -6,11 +6,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.dogedex.api.ApiResponseStatus
 import com.app.dogedex.databinding.ActivityDogListBinding
 import com.app.dogedex.dogdetail.DogDetailActivity
 import com.app.dogedex.dogdetail.DogDetailActivity.Companion.DOG_KEY
+import com.app.dogedex.utils.GRID_SPAN_COUNT
 
 class DogListActivity : AppCompatActivity() {
     private val dogListViewModel: DogListViewModel by viewModels()
@@ -26,7 +28,7 @@ class DogListActivity : AppCompatActivity() {
 
         // Configura el RecyclerView
         val recycler = binding.rvDogRecycler
-        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.layoutManager = GridLayoutManager(this, GRID_SPAN_COUNT)
 
         // Configura el Adaptador del RecyclerView
         val adapterD = DogAdapter()
