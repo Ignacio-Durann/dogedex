@@ -45,25 +45,22 @@ class DogListActivity : AppCompatActivity() {
         }
 
         dogListViewModel.status.observe(this){status ->
+
             when(status){
-                ApiResponseStatus.LOADING -> {
-                    //muestra la carga de datos
-                    loadingWheel.visibility = View.VISIBLE
-                }
-                ApiResponseStatus.ERROR -> {
+                is ApiResponseStatus.Error -> {
                     //muestra la error en la datos
-                    Toast.makeText(this,"Error al descargar los datos", Toast.LENGTH_SHORT)
-                   // ocultar el progress bar
-                    loadingWheel.visibility = View.GONE
-                }
-                ApiResponseStatus.SUCCESS -> {
-                    //muestra la carga de datos ya finalizada
+                    Toast.makeText(this,getString(status.messageId) , Toast.LENGTH_SHORT)
                     // ocultar el progress bar
                     loadingWheel.visibility = View.GONE
                 }
-
-                else ->{
-                    Toast.makeText(this,"Estatus desconocido", Toast.LENGTH_SHORT)
+                is ApiResponseStatus.Loading -> {
+                    //muestra la carga de datos
+                    loadingWheel.visibility = View.VISIBLE
+                }
+                is ApiResponseStatus.Success -> {
+                    //muestra la carga de datos ya finalizada
+                    // ocultar el progress bar
+                    loadingWheel.visibility = View.GONE
                 }
             }
         }
