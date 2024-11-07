@@ -15,6 +15,7 @@ import com.app.dogedex.MainActivity
 import com.app.dogedex.R
 import com.app.dogedex.api.ApiResponseStatus
 import com.app.dogedex.databinding.ActivityLoginBinding
+import com.app.dogedex.model.User
 
 class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
     SignUpFragment.SignUpFragmentActions {
@@ -51,6 +52,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
 
         viewModel.user.observe(this) { user ->
             if (user != null) {
+                User.setLoggedInUser(this, user)
                 startMainActivity()
             }
         }
@@ -59,6 +61,7 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
 
     private fun startMainActivity(){
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     override fun onRegistrerButtonClick() {
