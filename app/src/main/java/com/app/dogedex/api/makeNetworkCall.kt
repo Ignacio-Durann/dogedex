@@ -1,6 +1,7 @@
 package com.app.dogedex.api
 
 import com.app.dogedex.R
+import com.app.dogedex.utils.UNAUTHORIZE_CODE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
@@ -13,7 +14,7 @@ suspend fun <T> makeNetworkCall(
     } catch (e: UnknownHostException) {
         ApiResponseStatus.Error(R.string.unknown_host_exception_error)
     } catch (e: retrofit2.HttpException){
-       val errorMessage = if (e.code() == 401){
+       val errorMessage = if (e.code() == UNAUTHORIZE_CODE){
            R.string.wrong_user_or_password
        }else{
            R.string.unknown_error
