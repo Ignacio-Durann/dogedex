@@ -37,5 +37,16 @@ class User(
                 prefs.getString(EMAIL_KEY,"")?: "",
                 prefs.getString(AUTH_TOKEN_KEY,"")?: "")
         }
+
+        fun logout(activity: Activity){
+            activity.getSharedPreferences(
+                AUTH_PREFS,
+                Context.MODE_PRIVATE)
+                .also {
+                    it.edit()
+                        .clear()
+                        .apply()
+            }
+        }
     }
 }
