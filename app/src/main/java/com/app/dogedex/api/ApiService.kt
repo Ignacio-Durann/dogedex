@@ -1,12 +1,15 @@
 package com.app.dogedex.api
-import com.app.dogedex.api.response.Dog
+import com.app.dogedex.api.dto.SignUpDTO
 import com.app.dogedex.api.response.DogListApiResponse
+import com.app.dogedex.api.response.SignUpApiResponse
 import com.app.dogedex.utils.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 // Define la instancia de Retrofit dentro del objeto DogsApi
 object DogsApi {
@@ -34,4 +37,8 @@ object DogsApi {
 interface ApiService {
     @GET("dogs")
     suspend fun getAllDogs(): DogListApiResponse
+
+    @POST("sign_up")
+    suspend fun signUp(@Body signUpDTO: SignUpDTO): SignUpApiResponse
+
 }

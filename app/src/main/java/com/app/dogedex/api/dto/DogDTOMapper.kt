@@ -1,6 +1,6 @@
 package com.app.dogedex.api.dto
 
-import com.app.dogedex.api.response.Dog
+import com.app.dogedex.model.Dog
 
 class DogDTOMapper {
 

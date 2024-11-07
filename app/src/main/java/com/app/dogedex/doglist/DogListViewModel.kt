@@ -1,12 +1,11 @@
 package com.app.dogedex.doglist
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.dogedex.api.ApiResponseStatus
-import com.app.dogedex.api.response.Dog
+import com.app.dogedex.model.Dog
 import kotlinx.coroutines.launch
 
 class DogListViewModel : ViewModel() {

@@ -20,4 +20,9 @@
     <string name="email_is_not_valid">Email is not valid</string>
     <string name="password_must_not_be_empty">Password must not be empty</string>
     <string name="password_do_not_match">Password do not match</string>
+    <string name="sign_up_error">sign_up_error</string>
+    <string name="sign_in_error">sign_in_error</string>
+    <string name="user_already_exist">user_already_exist</string>
+    <string name="there_was_an_error">There was an error</string>
+    <string name="ok">Ok</string>
 </resources>

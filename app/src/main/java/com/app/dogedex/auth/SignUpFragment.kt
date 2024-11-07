@@ -1,5 +1,6 @@
 package com.app.dogedex.auth
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,22 @@ import com.app.dogedex.utils.Utils
 class SignUpFragment : Fragment() {
 
 private lateinit var binding: FragmentSignUpBinding
+
+    interface SignUpFragmentActions{
+        fun onSignUpFieldValidated(email: String, password: String, confimationPassword: String)
+    }
+
+    private lateinit var signUpFragmentActions: SignUpFragmentActions
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        signUpFragmentActions = try {
+            context as SignUpFragmentActions
+        }catch (e: ClassCastException){
+            throw ClassCastException ("$context must implement LoginFragmentActions")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,6 +66,7 @@ private lateinit var binding: FragmentSignUpBinding
         }
 
         //sign up
+        signUpFragmentActions.onSignUpFieldValidated(email, password, passwordConfirmation)
     }
 
     private fun cleanInputs() {
