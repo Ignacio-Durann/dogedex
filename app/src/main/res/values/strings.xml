@@ -25,4 +25,7 @@
     <string name="user_already_exist">user_already_exist</string>
     <string name="there_was_an_error">There was an error</string>
     <string name="ok">Ok</string>
+    <string name="email_must_not_be_empty">Email must not be empty</string>
+    <string name="some_field_is_empty_make_sure_to_fill_them">Some field is empty, make sure to fill them</string>
+    <string name="wrong_user_or_password">Wrong user or password</string>
 </resources>

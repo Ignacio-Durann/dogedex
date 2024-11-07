@@ -12,7 +12,15 @@ suspend fun <T> makeNetworkCall(
         ApiResponseStatus.Success(call())
     } catch (e: UnknownHostException) {
         ApiResponseStatus.Error(R.string.unknown_host_exception_error)
-    } catch (e: Exception) {
+    } catch (e: retrofit2.HttpException){
+       val errorMessage = if (e.code() == 401){
+           R.string.wrong_user_or_password
+       }else{
+           R.string.unknown_error
+       }
+        ApiResponseStatus.Error(errorMessage)
+    }
+    catch (e: Exception) {
 
         val errorMessage = when(e.message){
             "sign_up_error" -> R.string.sign_up_error

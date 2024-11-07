@@ -1,7 +1,8 @@
 package com.app.dogedex.api
 import com.app.dogedex.api.dto.SignUpDTO
 import com.app.dogedex.api.response.DogListApiResponse
-import com.app.dogedex.api.response.SignUpApiResponse
+import com.app.dogedex.api.response.AuthApiResponse
+import com.app.dogedex.auth.LoginDTO
 import com.app.dogedex.utils.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,10 +36,16 @@ object DogsApi {
 
 // Define la interfaz de API
 interface ApiService {
+    //obtiene todos los dogs de la base de datos
     @GET("dogs")
     suspend fun getAllDogs(): DogListApiResponse
 
+    //agrega un nuevo usuario
     @POST("sign_up")
-    suspend fun signUp(@Body signUpDTO: SignUpDTO): SignUpApiResponse
+    suspend fun signUp(@Body signUpDTO: SignUpDTO): AuthApiResponse
+
+    //se loguea un usuario ya existente
+    @POST("sign_in")
+    suspend fun login(@Body loginDTO: LoginDTO): AuthApiResponse
 
 }

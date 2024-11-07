@@ -6,9 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.app.dogedex.R
 import com.app.dogedex.databinding.FragmentSignUpBinding
-import com.app.dogedex.utils.Utils
+import com.app.dogedex.utils.isValidEmail
 
 
 class SignUpFragment : Fragment() {
@@ -49,7 +50,7 @@ private lateinit var binding: FragmentSignUpBinding
     private fun validateField() {
         cleanInputs()
         val email = binding.emailEdit.text.toString()
-        if (!Utils.isValidEmail(email)){
+        if (!isValidEmail(email)){
             binding.emailInput.error = getString(R.string.email_is_not_valid)
         }
         val  password = binding.passwordEdit.text.toString()
@@ -66,7 +67,12 @@ private lateinit var binding: FragmentSignUpBinding
         }
 
         //sign up
-        signUpFragmentActions.onSignUpFieldValidated(email, password, passwordConfirmation)
+        if (email.isNotEmpty() && password.isNotEmpty() && passwordConfirmation.isNotEmpty()){
+            signUpFragmentActions.onSignUpFieldValidated(email, password, passwordConfirmation)
+        }else{
+            Toast.makeText(context, getString(R.string.some_field_is_empty_make_sure_to_fill_them), Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun cleanInputs() {

@@ -59,12 +59,16 @@ class LoginActivity : AppCompatActivity(), LoginFragment.LoginFragmentActions,
 
     private fun startMainActivity(){
         startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 
     override fun onRegistrerButtonClick() {
         findNavController(R.id.nav_host_fragment)
             .navigate(LoginFragmentDirections.actionLoginFragmentToSignUpFragment())
+    }
+
+    override fun onLoginFieldValidated(email: String, password: String) {
+        viewModel.login(email, password)
+
     }
 
     override fun onSignUpFieldValidated(
