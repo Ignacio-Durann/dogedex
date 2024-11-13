@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.app.dogedex.api.ApiServiceInterceptor
 import com.app.dogedex.auth.LoginActivity
 import com.app.dogedex.databinding.ActivityMainBinding
 import com.app.dogedex.doglist.DogListActivity
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         if (user == null){
             openLoginActivity()
             return
+        }else{
+            ApiServiceInterceptor.setSessionToken(user.authenticationToken)
         }
 
 
