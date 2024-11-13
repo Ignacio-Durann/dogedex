@@ -26,4 +26,11 @@ class DogRepository {
         }
     }
 
+    suspend fun getUserDogs(): ApiResponseStatus<List<Dog>> = makeNetworkCall {
+        val dogListApiResponse = DogsApi.retrofitService.getUserDogs()
+        val dogDTOList = dogListApiResponse.data.dogs
+        val dogDTOMapper = DogDTOMapper()
+        dogDTOMapper.fromDogDTOListToDomainList(dogDTOList)
+    }
+
 }

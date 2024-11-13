@@ -1,5 +1,5 @@
 package com.app.dogedex.api
-import com.app.dogedex.api.DogsApi.loggingInterceptor
+
 import com.app.dogedex.api.dto.AddDogToUserDTO
 import com.app.dogedex.api.dto.SignUpDTO
 import com.app.dogedex.api.response.DogListApiResponse
@@ -13,7 +13,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -28,12 +27,13 @@ private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create())
     .build()
 
+private val loggingInterceptor = HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.BODY // Nivel de logging (BODY para detalles completos)
+}
+
 
 // Define la instancia de Retrofit dentro del objeto DogsApi
 object DogsApi {
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY // Nivel de logging (BODY para detalles completos)
-    }
 
     // Crear el servicio de API con Retrofit
     val retrofitService: ApiService by lazy {
@@ -55,8 +55,12 @@ interface ApiService {
     @POST("sign_in")
     suspend fun login(@Body loginDTO: LoginDTO): AuthApiResponse
 
-   @Headers("${ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY}: true")
+    @Headers("${ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY}: true")
     @POST("add_dog_to_user")
     suspend fun addDogUser(@Body addDogToUserDTO: AddDogToUserDTO): DefaultResponse
+
+    @Headers("${ApiServiceInterceptor.NEEDS_AUTH_HEADER_KEY}: true")
+    @GET("get_user_dogs")
+    suspend fun getUserDogs(): DogListApiResponse
 
 }
