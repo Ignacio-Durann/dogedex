@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.app.dogedex.auth.LoginActivity
 import com.app.dogedex.databinding.ActivityMainBinding
+import com.app.dogedex.doglist.DogListActivity
 import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
 
@@ -28,6 +29,14 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.dogListFab.setOnClickListener {
+            openDogListActivity()
+        }
+
+    }
+
+    private fun openDogListActivity() {
+        startActivity(Intent(this, DogListActivity::class.java))
     }
 
     private fun openSettingsActivity() {
