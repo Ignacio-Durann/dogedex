@@ -39,6 +39,11 @@ class DogListActivity : AppCompatActivity() {
             intent.putExtra(DOG_KEY, it)
             startActivity(intent)
         }
+
+        adapterD.setOnLongItemClickListener {
+            dogListViewModel.addDogToUser(it.id)
+        }
+
         recycler.adapter = adapterD
 
         // Observa el LiveData de dogList para actualizar la lista en el adaptador
