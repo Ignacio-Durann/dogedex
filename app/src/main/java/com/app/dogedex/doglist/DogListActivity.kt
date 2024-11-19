@@ -32,16 +32,17 @@ class DogListActivity : AppCompatActivity() {
 
         // Configura el Adaptador del RecyclerView
         val adapterD = DogAdapter()
+
+        adapterD.setOnLongItemClickListener {
+            dogListViewModel.addDogToUser(it.id)
+        }
+
         //se agrega el click al nombre
         adapterD.setOnItemClickListener {
             //pasasr dog a dogDetailActivity
             val intent = Intent(this, DogDetailActivity::class.java)
             intent.putExtra(DOG_KEY, it)
             startActivity(intent)
-        }
-
-        adapterD.setOnLongItemClickListener {
-            dogListViewModel.addDogToUser(it.id)
         }
 
         recycler.adapter = adapterD
