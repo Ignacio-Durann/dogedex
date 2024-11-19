@@ -19,6 +19,7 @@ moshiRetrofit = "2.9.0"
 interceptorLoggin = "4.9.3"
 navigation-plugin = "2.7.1"
 coil-compose = "1.4.0"
+kotlin-parecelize = "2.1.0-RC2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,4 +46,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
 navigation-safe = { id = "androidx.navigation.safeargs", version.ref = "navigation-plugin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-parecelize"}
 
