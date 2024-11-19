@@ -10,6 +10,7 @@ import com.app.dogedex.api.dto.DogDTOMapper
 import com.app.dogedex.api.makeNetworkCall
 import com.app.dogedex.api.response.DefaultResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
 class DogRepository {
@@ -18,8 +19,11 @@ class DogRepository {
 
         return withContext(Dispatchers.IO) {
 
-            val allDogsListResponse = downloadDogs()
-            val userDogsListResponse = getUserDogs()
+            val allDogsListDeferred = async { downloadDogs() }
+            val userDogsListDeferred = async { getUserDogs() }
+
+            val allDogsListResponse = allDogsListDeferred.await()
+            val userDogsListResponse = userDogsListDeferred.await()
 
             when {
                 allDogsListResponse is ApiResponseStatus.Error -> {
