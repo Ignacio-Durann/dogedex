@@ -74,7 +74,7 @@ class DogAdapter : ListAdapter<Dog, DogAdapter.DogViewHolder>(DiffCallback) {
                     onLongItemClickListener?.invoke(dog)
                     true
                 }
-                
+
             }
 
 

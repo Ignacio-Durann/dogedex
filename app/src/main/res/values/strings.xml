@@ -31,4 +31,5 @@
     <string name="this_is_a_description">This is a description</string>
     <string name="logout">LogOut</string>
     <string name="error_adding_dog">Error adding dog</string>
+    <string name="you_need_to_accept_camera_permission_to_use_this_app">You need to accept camera permission to use this app</string>
 </resources>
