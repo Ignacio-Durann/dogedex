@@ -20,6 +20,7 @@ val weightFemale: String,
 val createdAt: String,
 val updateAp: String,
 val mlId: String,
+val inCollection: Boolean = true
 ) : Parcelable, Comparable<Dog> {
     override fun compareTo(other: Dog) = if (this.index > other.index){
             1

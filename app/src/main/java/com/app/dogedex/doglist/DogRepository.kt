@@ -57,7 +57,7 @@ class DogRepository {
                 it
             } else {
                 Dog(0, it.index, "", "", "", "", "", "", ""
-                    , "", "", "", "", "", "", "")
+                    , "", "", "", "", "", "", "", inCollection = false)
             }
 
     }.sorted()
