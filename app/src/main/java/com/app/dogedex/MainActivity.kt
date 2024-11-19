@@ -81,8 +81,8 @@ class MainActivity : AppCompatActivity() {
                 // "cancel" or "no thanks" button that lets the user continue
                 // using your app without granting the permission.
                 AlertDialog.Builder(this)
-                    .setTitle("Acerptar permiso")
-                    .setMessage("acepta el permiso para la camara")
+                    .setTitle(getString(R.string.accept_permission))
+                    .setMessage(getString(R.string.it_need_permission_granted_to_use_this_app))
                     .setPositiveButton(R.string.ok){
                         _, _ ->
                         requestPermissionLauncher.launch(
