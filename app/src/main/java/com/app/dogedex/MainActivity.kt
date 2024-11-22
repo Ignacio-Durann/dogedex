@@ -3,12 +3,16 @@ package com.app.dogedex
 import android.content.Intent
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -21,6 +25,7 @@ import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -29,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             if (isGranted) {
                 // Permission is granted. Continue the action or workflow in your
                 // app. open camera
+                startCamera()
             } else {
                 //Permission is not granted
                 Toast.makeText(
@@ -41,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val user = User.getLoggedInUser(this)
         if (user == null) {
@@ -65,6 +71,29 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            //use to bind the lifecycle of cameras to gthe lifecycle owner
+            val cameraProvider = cameraProviderFuture.get()
+            // preview
+            val preview = Preview.Builder().build()
+            preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
+
+            //select camera back as default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            //bind uses cases to camera
+            cameraProvider.bindToLifecycle(
+                this,
+                cameraSelector,
+                preview
+            )
+        }, ContextCompat.getMainExecutor(this))
+
+    }
+
     private fun requestCameraPermission() {
         when {
             ContextCompat.checkSelfPermission(
@@ -72,25 +101,19 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // You can use the API that requires the permission.
+                startCamera()
             }
 
             shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
-                // In an educational UI, explain to the user why your app requires this
-                // permission for a specific feature to behave as expected, and what
-                // features are disabled if it's declined. In this UI, include a
-                // "cancel" or "no thanks" button that lets the user continue
-                // using your app without granting the permission.
                 AlertDialog.Builder(this)
                     .setTitle(getString(R.string.accept_permission))
                     .setMessage(getString(R.string.it_need_permission_granted_to_use_this_app))
-                    .setPositiveButton(R.string.ok){
-                        _, _ ->
+                    .setPositiveButton(R.string.ok) { _, _ ->
                         requestPermissionLauncher.launch(
                             Manifest.permission.CAMERA
                         )
                     }
-                    .setNegativeButton(android.R.string.cancel){
-                            _, _ ->
+                    .setNegativeButton(android.R.string.cancel) { _, _ ->
                     }
                     .show()
             }
@@ -102,9 +125,7 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.CAMERA
                 )
             }
-        }//else {
-        // open camera
-        // }
+        }
     }
 
     private fun openDogListActivity() {
