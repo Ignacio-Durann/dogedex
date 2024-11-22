@@ -20,6 +20,7 @@ interceptorLoggin = "4.9.3"
 navigation-plugin = "2.7.1"
 coil-compose = "1.4.0"
 kotlin-parecelize = "2.1.0-RC2"
+camera-x = "1.5.0-alpha03"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +39,10 @@ retrofitJson = {group = "com.squareup.retrofit2", name = "converter-gson", versi
 moshiRetrofit = {group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "moshiRetrofit" }
 interceptorLoggin = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "interceptorLoggin" }
 coil-compose = {group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+cameraX-core = {group = "androidx.camera", name = "camera-core", version.ref = "camera-x" }
+cameraX-camera2 = {group = "androidx.camera", name = "camera-camera2", version.ref = "camera-x" }
+cameraX-lifecicle = {group = "androidx.camera", name = "camera-lifecycle", version.ref = "camera-x" }
+
 
 
 [plugins]
