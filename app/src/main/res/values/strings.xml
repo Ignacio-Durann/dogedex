@@ -34,4 +34,5 @@
     <string name="you_need_to_accept_camera_permission_to_use_this_app">You need to accept camera permission to use this app</string>
     <string name="accept_permission">Accept permission</string>
     <string name="it_need_permission_granted_to_use_this_app">it need permission granted to use this app</string>
+    <string name="the_photo_has_not_been_taken">"The photo has not been taken "</string>
 </resources>

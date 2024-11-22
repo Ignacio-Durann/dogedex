@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
@@ -23,9 +25,15 @@ import com.app.dogedex.databinding.ActivityMainBinding
 import com.app.dogedex.doglist.DogListActivity
 import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
+import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var imageCapture: ImageCapture
+    private lateinit var cameraExecutor: ExecutorService
+    private var isCameraReady = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -34,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             if (isGranted) {
                 // Permission is granted. Continue the action or workflow in your
                 // app. open camera
-                startCamera()
+                setupCamera()
             } else {
                 //Permission is not granted
                 Toast.makeText(
@@ -57,7 +65,6 @@ class MainActivity : AppCompatActivity() {
             ApiServiceInterceptor.setSessionToken(user.authenticationToken)
         }
 
-
         binding.settingsFab.setOnClickListener {
             openSettingsActivity()
 
@@ -65,6 +72,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.dogListFab.setOnClickListener {
             openDogListActivity()
+        }
+
+        binding.takePhotoFab.setOnClickListener {
+            if (isCameraReady){
+                takePhoto()
+            }
+
         }
 
         requestCameraPermission()
@@ -88,10 +102,60 @@ class MainActivity : AppCompatActivity() {
             cameraProvider.bindToLifecycle(
                 this,
                 cameraSelector,
-                preview
+                preview,
+                imageCapture
             )
         }, ContextCompat.getMainExecutor(this))
 
+    }
+
+
+    private fun takePhoto() {
+        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(getOutputPhotoFile()).build()
+        imageCapture.takePicture(outputFileOptions, cameraExecutor,
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(error: ImageCaptureException) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.the_photo_has_not_been_taken)+error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    // insert your code here.
+                }
+            })
+    }
+
+    private fun getOutputPhotoFile(): File{
+        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name) + ".jpg").apply { mkdirs() }
+        }
+        return if (mediaDir != null && mediaDir.exists()){
+            mediaDir
+        } else{
+            filesDir
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::cameraExecutor.isInitialized) {
+            cameraExecutor.shutdown()
+        }
+
+    }
+
+    private fun setupCamera() {
+        binding.cameraPreview.post{
+            imageCapture = ImageCapture.Builder()
+                .setTargetRotation(binding.cameraPreview.display.rotation)
+                .build()
+            cameraExecutor = Executors.newSingleThreadExecutor()
+            startCamera()
+            isCameraReady = true
+        }
     }
 
     private fun requestCameraPermission() {
@@ -101,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // You can use the API that requires the permission.
-                startCamera()
+                setupCamera()
             }
 
             shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
