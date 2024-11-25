@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.cameraX.camera2)
     implementation(libs.cameraX.lifecicle)
     implementation(libs.cameraX.view)
+    implementation(libs.tensorflow.lite)
+    implementation(libs.tensorflow.lite.sopport)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
