@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -99,12 +100,22 @@ class MainActivity : AppCompatActivity() {
             //select camera back as default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+            imageAnalysis.setAnalyzer(cameraExecutor){ imageProxy ->
+                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+
+                imageProxy.close()
+            }
+
             //bind uses cases to camera
             cameraProvider.bindToLifecycle(
                 this,
                 cameraSelector,
                 preview,
-                imageCapture
+                imageCapture,
+                imageAnalysis
             )
         }, ContextCompat.getMainExecutor(this))
 
