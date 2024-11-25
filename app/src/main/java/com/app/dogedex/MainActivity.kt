@@ -25,6 +25,7 @@ import com.app.dogedex.databinding.ActivityMainBinding
 import com.app.dogedex.doglist.DogListActivity
 import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
+import com.app.dogedex.utils.PHOTO_URI_KEY
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -124,8 +125,16 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     // insert your code here.
+                    val photoUri = outputFileResults.savedUri
+                    openWholeImageActivity(photoUri.toString())
                 }
             })
+    }
+
+    private fun openWholeImageActivity(photoUri: String){
+        val intent = Intent(this, WholeImageActivity::class.java)
+        intent.putExtra(PHOTO_URI_KEY, photoUri)
+        startActivity(intent)
     }
 
     private fun getOutputPhotoFile(): File{
