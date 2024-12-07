@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        requestedOrientation.
         val user = User.getLoggedInUser(this)
         if (user == null) {
             openLoginActivity()
