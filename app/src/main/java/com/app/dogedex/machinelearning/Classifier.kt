@@ -52,10 +52,10 @@ class Classifier(tfLiteModel: MappedByteBuffer, private val labels: List<String>
 
         // Reads type and shape of input and output tensors, respectively.
         val imageTensorIndex = 0
-        val imageShape = tfLite.getInputTensor(imageTensorIndex).shape()
+        val imageShape = tfLite.getInputTensor(imageTensorIndex).shape() // {1, height, width, rgb}  //{1, 224, 224, 3
         imageSizeY = imageShape[1]
         imageSizeX = imageShape[2]
-        val imageDataType = tfLite.getInputTensor(imageTensorIndex).dataType()
+        val imageDataType = tfLite.getInputTensor(imageTensorIndex).dataType() // UINT8
         val probabilityTensorIndex = 0
         val probabilityShape =
             tfLite.getOutputTensor(probabilityTensorIndex).shape() // {1, NUM_CLASSES}
