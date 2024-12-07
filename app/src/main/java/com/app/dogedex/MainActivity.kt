@@ -3,6 +3,7 @@ package com.app.dogedex
 import android.content.Intent
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -24,9 +25,13 @@ import com.app.dogedex.api.ApiServiceInterceptor
 import com.app.dogedex.auth.LoginActivity
 import com.app.dogedex.databinding.ActivityMainBinding
 import com.app.dogedex.doglist.DogListActivity
+import com.app.dogedex.machinelearning.Classifier
 import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
+import com.app.dogedex.utils.LABEL_PATH
+import com.app.dogedex.utils.MODEL_PATH
 import com.app.dogedex.utils.PHOTO_URI_KEY
+import org.tensorflow.lite.support.common.FileUtil
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -36,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraExecutor: ExecutorService
     private var isCameraReady = false
+    private lateinit var classifier: Classifier
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -85,6 +91,16 @@ class MainActivity : AppCompatActivity() {
 
         requestCameraPermission()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        classifier = Classifier(
+            FileUtil.loadMappedFile(
+                this@MainActivity, MODEL_PATH),
+            FileUtil.loadLabels(
+                this@MainActivity, LABEL_PATH)
+        )
     }
 
     private fun startCamera() {
@@ -137,6 +153,11 @@ class MainActivity : AppCompatActivity() {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     // insert your code here.
                     val photoUri = outputFileResults.savedUri
+
+
+                    val bitmap = BitmapFactory.decodeFile(photoUri?.path)
+                    classifier.recognizeImage(bitmap)
+
                     openWholeImageActivity(photoUri.toString())
                 }
             })
