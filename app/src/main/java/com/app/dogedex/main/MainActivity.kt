@@ -1,14 +1,14 @@
-package com.app.dogedex
+package com.app.dogedex.main
 
 import android.content.Intent
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -17,20 +17,20 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.app.dogedex.R
+import com.app.dogedex.api.ApiResponseStatus
 import com.app.dogedex.api.ApiServiceInterceptor
 import com.app.dogedex.auth.LoginActivity
 import com.app.dogedex.databinding.ActivityMainBinding
+import com.app.dogedex.dogdetail.DogDetailActivity
 import com.app.dogedex.doglist.DogListActivity
 import com.app.dogedex.machinelearning.Classifier
+import com.app.dogedex.model.Dog
 import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
 import com.app.dogedex.utils.LABEL_PATH
 import com.app.dogedex.utils.MODEL_PATH
-import com.app.dogedex.utils.PHOTO_URI_KEY
 import org.tensorflow.lite.support.common.FileUtil
 import java.io.File
 import java.util.concurrent.ExecutorService
@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private var isCameraReady = false
     private lateinit var classifier: Classifier
+    private val viewModel: MainViewModel by viewModels()
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        requestedOrientation.
         val user = User.getLoggedInUser(this)
         if (user == null) {
             openLoginActivity()
@@ -89,8 +91,36 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        viewModel.status.observe(this){
+            status ->
+
+            when(status){
+                is ApiResponseStatus.Error -> {
+                    binding.loadingWheel.visibility = View.GONE
+                    Toast.makeText(this, status.messageId, Toast.LENGTH_SHORT).show()
+                }
+                is ApiResponseStatus.Loading -> {binding.loadingWheel.visibility = View.VISIBLE}
+                is ApiResponseStatus.Success -> {binding.loadingWheel.visibility = View.GONE}
+
+            }
+        }
+
+        viewModel.dogList.observe(this){
+            dog ->
+            if (dog != null){
+                openDogDetailActivity(dog)
+            }
+        }
+
+
         requestCameraPermission()
 
+    }
+
+    private fun openDogDetailActivity(dog: Dog) {
+        val intent = Intent(this, DogDetailActivity::class.java)
+        intent.putExtra(DogDetailActivity.DOG_KEY, dog)
+        startActivity(intent)
     }
 
     override fun onStart() {
@@ -156,18 +186,14 @@ class MainActivity : AppCompatActivity() {
 
 
                     val bitmap = BitmapFactory.decodeFile(photoUri?.path)
-                    classifier.recognizeImage(bitmap)
+                    val dogRecognition = classifier.recognizeImage(bitmap).first()
+                    viewModel.getDogByMlId(dogRecognition.id)
 
-                    openWholeImageActivity(photoUri.toString())
+
                 }
             })
     }
 
-    private fun openWholeImageActivity(photoUri: String){
-        val intent = Intent(this, WholeImageActivity::class.java)
-        intent.putExtra(PHOTO_URI_KEY, photoUri)
-        startActivity(intent)
-    }
 
     private fun getOutputPhotoFile(): File{
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
