@@ -8,6 +8,7 @@ const val AUTH_TOKEN_KEY = "token"
 const val GRID_SPAN_COUNT = 3
 const val UNAUTHORIZE_CODE = 401
 const val PHOTO_URI_KEY = "photo_uri"
+const val MAX_RECOGNITION_DOG_RESULTS = 5
 
 
 
