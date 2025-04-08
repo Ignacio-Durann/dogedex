@@ -23,6 +23,16 @@ kotlin-parecelize = "2.1.0-RC2"
 camera-x = "1.5.0-alpha03"
 tensorflow-lite = "0.0.0-nightly-SNAPSHOT"
 tensorflow-lite-support = "0.1.0"
+compose-ui = "1.6.4"
+material2 = "1.6.4"
+material3 = "1.2.1"
+foundation = "1.6.4"
+tooling = "1.6.4"
+activity-compose = "1.10.0"
+viewmodel-compose = "2.8.5"
+livedata = "1.6.4"
+rxjava2 = "1.6.4"
+adaptive = "1.0.0-alpha04"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,6 +57,28 @@ cameraX-lifecicle = {group = "androidx.camera", name = "camera-lifecycle", versi
 cameraX-view = {group = "androidx.camera", name = "camera-view", version.ref = "camera-x" }
 tensorflow-lite = {group = "org.tensorflow", name = "tensorflow-lite", version.ref = "tensorflow-lite"}
 tensorflow-lite-sopport = {group = "org.tensorflow", name = "tensorflow-lite-support", version.ref = "tensorflow-lite-support"}
+
+#jetpack compose
+
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose-ui" }
+compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "tooling" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "tooling" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose-ui" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose-ui" }
+
+material2 = { group = "androidx.compose.material", name = "material", version.ref = "material2" }
+material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "material2" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material2" }
+
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "adaptive" }
+
+foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel-compose" }
+runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "livedata" }
+runtime-rxjava2 = { group = "androidx.compose.runtime", name = "runtime-rxjava2", version.ref = "rxjava2" }
 
 
 [plugins]

@@ -62,6 +62,33 @@ dependencies {
     implementation(libs.cameraX.view)
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.sopport)
+//    jetpack compose
+    implementation(libs.material3) // o
+    implementation(libs.material2) // o
+    implementation(libs.foundation) // o
+    implementation(libs.compose.ui)
+
+    // Soporte para Preview en Android Studio
+    implementation(libs.compose.ui.preview)
+    debugImplementation(libs.compose.ui.tooling)
+
+    // Tests de UI
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
+
+    // Íconos opcionales
+    implementation(libs.material.icons.core)
+    implementation(libs.material.icons.extended)
+
+    // Adaptive layout opcional
+    implementation(libs.material3.adaptive)
+
+    // Integraciones opcionales
+    implementation(libs.activity.compose)
+    implementation(libs.viewmodel.compose)
+    implementation(libs.runtime.livedata)
+    implementation(libs.runtime.rxjava2)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
