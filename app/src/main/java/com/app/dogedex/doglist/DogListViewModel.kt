@@ -31,12 +31,6 @@ class DogListViewModel : ViewModel() {
 
     }}
 
-    fun addDogToUser(dogId: Long) {
-        viewModelScope.launch {
-            _status.value = ApiResponseStatus.Loading()
-            handleAddDogResponseStatus(dogRepository.addDogToUser(dogId))
-        }
-    }
 
 
     @Suppress("UNCHECKED_CAST")
@@ -48,11 +42,4 @@ class DogListViewModel : ViewModel() {
         _status.value = apiResponseStatus as ApiResponseStatus<Any>
     }
 
-    private fun handleAddDogResponseStatus(apiResponseStatus: ApiResponseStatus<Any>) {
-        if (apiResponseStatus is ApiResponseStatus.Success){
-            getDogCollection()
-        }
-
-        _status.value = apiResponseStatus
-    }
 }
