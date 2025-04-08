@@ -2,8 +2,13 @@ package com.app.dogedex.main
 
 import android.content.Intent
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.graphics.Rect
+import android.graphics.YuvImage
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -15,6 +20,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -26,12 +32,14 @@ import com.app.dogedex.databinding.ActivityMainBinding
 import com.app.dogedex.dogdetail.DogDetailActivity
 import com.app.dogedex.doglist.DogListActivity
 import com.app.dogedex.machinelearning.Classifier
+import com.app.dogedex.machinelearning.DogRecognition
 import com.app.dogedex.model.Dog
 import com.app.dogedex.model.User
 import com.app.dogedex.settings.SettingsActivity
 import com.app.dogedex.utils.LABEL_PATH
 import com.app.dogedex.utils.MODEL_PATH
 import org.tensorflow.lite.support.common.FileUtil
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -83,12 +91,6 @@ class MainActivity : AppCompatActivity() {
             openDogListActivity()
         }
 
-        binding.takePhotoFab.setOnClickListener {
-            if (isCameraReady){
-                takePhoto()
-            }
-
-        }
 
         viewModel.status.observe(this){
             status ->
@@ -149,7 +151,12 @@ class MainActivity : AppCompatActivity() {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
             imageAnalysis.setAnalyzer(cameraExecutor){ imageProxy ->
-                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+
+                val bitmap = converImageProxyToBitmap(imageProxy)
+                if (bitmap != null){
+                    val dogRecognition = classifier.recognizeImage(bitmap).first()
+                    enableTakePhotoButton(dogRecognition)
+                }
 
                 imageProxy.close()
             }
@@ -166,44 +173,51 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun enableTakePhotoButton(dogRecognition: DogRecognition) {
+        if (dogRecognition.confidence > 70.0){
+            binding.takePhotoFab.alpha = 1f
+            binding.takePhotoFab.setOnClickListener {
+                viewModel.getDogByMlId(dogRecognition.id)
+            }
+        }else{
+            binding.takePhotoFab.alpha = 0.2f
+            binding.takePhotoFab.setOnClickListener(null)
+        }
 
-    private fun takePhoto() {
-        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(getOutputPhotoFile()).build()
-        imageCapture.takePicture(outputFileOptions, cameraExecutor,
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(error: ImageCaptureException) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.the_photo_has_not_been_taken)+error,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    // insert your code here.
-                    val photoUri = outputFileResults.savedUri
-
-
-                    val bitmap = BitmapFactory.decodeFile(photoUri?.path)
-                    val dogRecognition = classifier.recognizeImage(bitmap).first()
-                    viewModel.getDogByMlId(dogRecognition.id)
-
-
-                }
-            })
     }
 
 
-    private fun getOutputPhotoFile(): File{
-        val mediaDir = externalMediaDirs.firstOrNull()?.let {
-            File(it, resources.getString(R.string.app_name) + ".jpg").apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists()){
-            mediaDir
-        } else{
-            filesDir
-        }
-    }
+//    private fun takePhoto() {
+//        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(getOutputPhotoFile()).build()
+//        imageCapture.takePicture(outputFileOptions, cameraExecutor,
+//            object : ImageCapture.OnImageSavedCallback {
+//                override fun onError(error: ImageCaptureException) {
+//                    Toast.makeText(
+//                        this@MainActivity,
+//                        getString(R.string.the_photo_has_not_been_taken)+error,
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//
+//                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+//                    // insert your code here.
+//
+//
+//                }
+//            })
+//    }
+
+
+//    private fun getOutputPhotoFile(): File{
+//        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+//            File(it, resources.getString(R.string.app_name) + ".jpg").apply { mkdirs() }
+//        }
+//        return if (mediaDir != null && mediaDir.exists()){
+//            mediaDir
+//        } else{
+//            filesDir
+//        }
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -269,5 +283,36 @@ class MainActivity : AppCompatActivity() {
     private fun openLoginActivity() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    @SuppressLint("UnsafeOptInUsageError")
+    private fun converImageProxyToBitmap(imageProxy: ImageProxy): Bitmap? {
+        val image = imageProxy.image ?: return null
+
+        val yBuffer = image.planes[0].buffer // Y plane
+        val uBuffer = image.planes[1].buffer // U plane (chrominance)
+        val vBuffer = image.planes[2].buffer // V plane (chrominance)
+
+        val ySize = yBuffer.remaining()
+        val uSize = uBuffer.remaining()
+        val vSize = vBuffer.remaining()
+
+        val nv21 = ByteArray(ySize + uSize + vSize)
+
+        //U and V are swapped
+        yBuffer.get(nv21, 0, ySize)
+        vBuffer.get(nv21, ySize, vSize)
+        uBuffer.get(nv21, ySize + vSize, uSize)
+
+        val yuvImage = YuvImage(nv21, ImageFormat.NV21, image.width, image.height, null)
+        val out = ByteArrayOutputStream()
+
+        yuvImage.compressToJpeg(
+            Rect(0,0,yuvImage.width, yuvImage.height),100,
+            out
+        )
+        val imageBytes = out.toByteArray()
+
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     }
 }
