@@ -114,6 +114,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.dogRecognition.observe(this){
+            enableTakePhotoButton(it)
+        }
+
 
         requestCameraPermission()
 
@@ -128,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        classifier = Classifier(
+        viewModel.setupClasifier(
             FileUtil.loadMappedFile(
                 this@MainActivity, MODEL_PATH),
             FileUtil.loadLabels(
@@ -154,13 +158,8 @@ class MainActivity : AppCompatActivity() {
                 .build()
             imageAnalysis.setAnalyzer(cameraExecutor){ imageProxy ->
 
-                val bitmap = converImageProxyToBitmap(imageProxy)
-                if (bitmap != null){
-                    val dogRecognition = classifier.recognizeImage(bitmap).first()
-                    enableTakePhotoButton(dogRecognition)
-                }
+                viewModel.recognizeImage(imageProxy)
 
-                imageProxy.close()
             }
 
             //bind uses cases to camera
@@ -287,34 +286,5 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    @SuppressLint("UnsafeOptInUsageError")
-    private fun converImageProxyToBitmap(imageProxy: ImageProxy): Bitmap? {
-        val image = imageProxy.image ?: return null
 
-        val yBuffer = image.planes[0].buffer // Y plane
-        val uBuffer = image.planes[1].buffer // U plane (chrominance)
-        val vBuffer = image.planes[2].buffer // V plane (chrominance)
-
-        val ySize = yBuffer.remaining()
-        val uSize = uBuffer.remaining()
-        val vSize = vBuffer.remaining()
-
-        val nv21 = ByteArray(ySize + uSize + vSize)
-
-        //U and V are swapped
-        yBuffer.get(nv21, 0, ySize)
-        vBuffer.get(nv21, ySize, vSize)
-        uBuffer.get(nv21, ySize + vSize, uSize)
-
-        val yuvImage = YuvImage(nv21, ImageFormat.NV21, image.width, image.height, null)
-        val out = ByteArrayOutputStream()
-
-        yuvImage.compressToJpeg(
-            Rect(0,0,yuvImage.width, yuvImage.height),100,
-            out
-        )
-        val imageBytes = out.toByteArray()
-
-        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-    }
 }
