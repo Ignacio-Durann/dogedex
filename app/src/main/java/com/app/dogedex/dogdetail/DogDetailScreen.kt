@@ -1,68 +1,305 @@
 package com.app.dogedex.dogdetail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberImagePainter
 import com.app.dogedex.R
 import com.app.dogedex.model.Dog
 
 @Composable
 fun DogDetailScreen() {
-        Box (
-            modifier = Modifier
-                .background(colorResource(id = R.color.secondary_background))
-                .padding(start =  8.dp, top = 16.dp, end = 8.dp, bottom = 16.dp),
-            contentAlignment = Alignment.TopCenter)
-        {
-            val dog = Dog(1L,78,"Pug","Herding","","","","","",
-                "amistoso","","","","","","", true)
+    Box(
+        modifier = Modifier
+            .background(colorResource(id = R.color.secondary_background))
+            .padding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 16.dp),
+        contentAlignment = Alignment.TopCenter
+    )
+    {
+        val dog = Dog(
+            1L,
+            78,
+            "Pug",
+            "Herding",
+            "amistoso",
+            "20 cm",
+            "20 cm",
+            "https://firebasestorage.googleapis.com/v0/b/perrodex-app.appspot.com/o/dog_details_images%2Fn02086079-pekinese.png?alt=media&token=f3cb4225-6690-42f2-a492-b77fcdeb5ee3",
+            "99",
+            "tranquilo",
+            "",
+            "5 kg",
+            "5 kg",
+            "",
+            "",
+            "",
+            true
+        )
         DogInformation(dog)
+        Image(
+            modifier = Modifier
+                .width(270.dp)
+                .padding(top = 80.dp),
+            painter = rememberImagePainter(dog.imageUrl),
+            contentDescription = dog.nameEs
+        )
+
+        FloatingActionButton(
+            modifier = Modifier.align(alignment = Alignment.BottomCenter),
+            onClick = { /*TODO*/ },) {
+            Icon(
+                imageVector = Icons.Filled.Check,
+                contentDescription = ""
+
+            )
         }
+    }
 }
 
 @Composable
 fun DogInformation(dog: Dog) {
-    Box(modifier = Modifier.fillMaxWidth()
-        .padding(top = 180.dp))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 180.dp)
+    )
     {
-    Surface(modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(4.dp),
-        colorResource(id = R.color.white)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()
-            .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally)
-        {
-            Text(modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.dog_index_format, dog.index),
-                fontSize = 32.sp,
-                color = colorResource(id = R.color.text_black),
-                textAlign = TextAlign.End
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(4.dp),
+            colorResource(id = R.color.white)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             )
+            {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.dog_index_format, dog.index),
+                    fontSize = 32.sp,
+                    color = colorResource(id = R.color.text_black),
+                    textAlign = TextAlign.End
+                )
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
+                    text = dog.nameEs,
+                    fontSize = 32.sp,
+                    color = colorResource(id = R.color.text_black),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Medium
+                )
+
+                LifeIcon()
+
+                Text(
+                    stringResource(id = R.string.dog_life_expentancy_format, dog.lifeExpentancy),
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = colorResource(id = R.color.text_black)
+                )
+
+                Text(
+                    text = dog.temperament,
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = colorResource(id = R.color.text_black),
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+
+                Divider(
+                    modifier = Modifier.padding(
+                        top = 8.dp,
+                        bottom = 16.dp,
+                        start = 8.dp,
+                        end = 8.dp
+                    ),
+                    color = colorResource(id = R.color.divider),
+                    thickness = 1.dp
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    DogDataColumn(
+                        modifier = Modifier.weight(1f),
+                        stringResource(id = R.string.female),
+                        dog.weightFemale,
+                        dog.heightFemale
+                    )
+
+                    VerticalDivider()
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = dog.dogType,
+                            textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.text_black),
+                            modifier = Modifier.padding(top = 8.dp),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = stringResource(id = R.string.group),
+                            textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.text_black),
+                            fontSize = 16.sp,
+                        )
+                    }
+
+                    VerticalDivider()
+
+                    DogDataColumn(
+                        modifier = Modifier.weight(1f),
+                        stringResource(id = R.string.male),
+                        dog.weightMale,
+                        dog.heightMale
+                    )
+
+                }
+            }
         }
     }
+}
+
+@Composable
+fun LifeIcon() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 80.dp, end = 80.dp)
+    ) {
+        Surface (
+            shape = CircleShape,
+            color = colorResource(id = R.color.color_primary)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_hearth_white),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(24.dp)
+                    //.padding(24.dp)
+            )
+        }
+        Surface (
+            shape = RoundedCornerShape(bottomEnd = 2.dp, topEnd = 2.dp),
+            modifier = Modifier
+                .width(200.dp)
+                .height(6.dp),
+            color = colorResource(id = R.color.color_primary)
+
+        ) {  }
+    }
+}
+
+@Composable
+private fun VerticalDivider() {
+    Divider(
+        modifier = Modifier
+            .height(42.dp)
+            .width(1.dp),
+        color = colorResource(id = R.color.divider),
+    )
+}
+
+@Composable
+private fun DogDataColumn(
+    modifier: Modifier,
+    genre: String,
+    weigth: String,
+    height: String
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            text = genre,
+            textAlign = TextAlign.Center,
+            color = colorResource(id = R.color.text_black),
+            modifier = Modifier.padding(top = 8.dp),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium
+        )
+        Text(
+            text = weigth,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            color = colorResource(id = R.color.text_black),
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        Text(
+            text = stringResource(id = R.string.weight),
+            textAlign = TextAlign.Center,
+            color = colorResource(id = R.color.text_black),
+            fontSize = 16.sp
+        )
+
+        Text(
+            text = height,
+            textAlign = TextAlign.Center,
+            color = colorResource(id = R.color.text_black),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+
+        Text(
+            text = stringResource(id = R.string.height),
+            textAlign = TextAlign.Center,
+            color = colorResource(id = R.color.text_black),
+            fontSize = 16.sp
+        )
+
     }
 }
 
 
 @Preview
 @Composable
-fun DogDetailPreview(){
+fun DogDetailPreview() {
     DogDetailScreen()
 }
