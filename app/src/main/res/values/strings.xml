@@ -36,4 +36,5 @@
     <string name="it_need_permission_granted_to_use_this_app">it need permission granted to use this app</string>
     <string name="the_photo_has_not_been_taken">"The photo has not been taken "</string>
     <string name="error_showing_image_no_photo_uri">Error showing image, no photo uri</string>
+    <string name="title_activity_dog_detail_compose">DogDetailComposeActivity</string>
 </resources>

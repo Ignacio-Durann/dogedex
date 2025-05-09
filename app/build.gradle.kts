@@ -4,11 +4,12 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.navigation.safe)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.app.dogedex"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.app.dogedex"
@@ -30,14 +31,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures{
         dataBinding = true
+        compose = true
     }
 }
 
@@ -70,6 +72,10 @@ dependencies {
 
     // Soporte para Preview en Android Studio
     implementation(libs.compose.ui.preview)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.compose.ui.tooling)
 
     // Tests de UI

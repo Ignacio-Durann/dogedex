@@ -1,6 +1,6 @@
 [versions]
 agp = "8.6.0"
-kotlin = "1.9.0"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -33,6 +33,9 @@ viewmodel-compose = "2.8.5"
 livedata = "1.6.4"
 rxjava2 = "1.6.4"
 adaptive = "1.0.0-alpha04"
+lifecycleRuntimeKtx = "2.9.0"
+composeBom = "2024.09.00"
+compose-k = "2.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -79,6 +82,9 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewmodel-compose" }
 runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "livedata" }
 runtime-rxjava2 = { group = "androidx.compose.runtime", name = "runtime-rxjava2", version.ref = "rxjava2" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 
 
 [plugins]
@@ -88,4 +94,5 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 org-jetbrains-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "org-jetbrains-kotlin-android" }
 navigation-safe = { id = "androidx.navigation.safeargs", version.ref = "navigation-plugin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-parecelize"}
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "compose-k" }
 
