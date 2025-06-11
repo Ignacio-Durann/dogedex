@@ -21,7 +21,7 @@ class DogDetailComposeActivity : ComponentActivity() {
             DogedexTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "pancho",
+                        name = "world",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -42,6 +42,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     DogedexTheme {
-        Greeting("pancho")
+        Greeting("world")
     }
 }
