@@ -8,15 +8,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.annotation.ExperimentalCoilApi
 import com.app.dogedex.api.ApiResponseStatus
 import com.app.dogedex.databinding.ActivityDogListBinding
-import com.app.dogedex.dogdetail.DogDetailActivity
-import com.app.dogedex.dogdetail.DogDetailActivity.Companion.DOG_KEY
+import com.app.dogedex.dogdetail.DogDetailComposeActivity
 import com.app.dogedex.utils.GRID_SPAN_COUNT
 
 class DogListActivity : AppCompatActivity() {
     private val dogListViewModel: DogListViewModel by viewModels()
 
+    @OptIn(ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,8 +38,8 @@ class DogListActivity : AppCompatActivity() {
         //se agrega el click al nombre
         adapterD.setOnItemClickListener {
             //pasasr dog a dogDetailActivity
-            val intent = Intent(this, DogDetailActivity::class.java)
-            intent.putExtra(DOG_KEY, it)
+            val intent = Intent(this, DogDetailComposeActivity::class.java)
+            intent.putExtra(DogDetailComposeActivity.DOG_KEY, it)
             startActivity(intent)
         }
 

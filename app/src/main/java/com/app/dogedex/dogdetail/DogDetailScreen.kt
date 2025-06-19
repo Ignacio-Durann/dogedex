@@ -18,6 +18,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,36 +34,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.app.dogedex.R
+import com.app.dogedex.api.ApiResponseStatus
 import com.app.dogedex.model.Dog
 
 @Composable
-fun DogDetailScreen() {
+fun DogDetailScreen(
+    dog: Dog,
+    status: ApiResponseStatus<Any>? = null,
+    onButtonClicked: () -> Unit,
+) {
     Box(
         modifier = Modifier
+            .fillMaxSize()
             .background(colorResource(id = R.color.secondary_background))
             .padding(start = 8.dp, top = 16.dp, end = 8.dp, bottom = 16.dp),
         contentAlignment = Alignment.TopCenter
     )
     {
-        val dog = Dog(
-            1L,
-            78,
-            "Pug",
-            "Herding",
-            "amistoso",
-            "20 cm",
-            "20 cm",
-            "https://firebasestorage.googleapis.com/v0/b/perrodex-app.appspot.com/o/dog_details_images%2Fn02086079-pekinese.png?alt=media&token=f3cb4225-6690-42f2-a492-b77fcdeb5ee3",
-            "99",
-            "tranquilo",
-            "",
-            "5 kg",
-            "5 kg",
-            "",
-            "",
-            "",
-            true
-        )
+
         DogInformation(dog)
         Image(
             modifier = Modifier
@@ -73,13 +62,18 @@ fun DogDetailScreen() {
         )
 
         FloatingActionButton(
-            modifier = Modifier.align(alignment = Alignment.BottomCenter),
-            onClick = { /*TODO*/ },) {
+            modifier = Modifier.align(alignment = Alignment.BottomCenter).padding(bottom = 64.dp),
+            onClick = { onButtonClicked },
+        ) {
             Icon(
                 imageVector = Icons.Filled.Check,
                 contentDescription = ""
 
             )
+        }
+
+        if(status is ApiResponseStatus.Loading){
+            LoadingWheel()
         }
     }
 }
@@ -209,27 +203,28 @@ fun LifeIcon() {
             .fillMaxWidth()
             .padding(start = 80.dp, end = 80.dp)
     ) {
-        Surface (
+        Surface(
             shape = CircleShape,
             color = colorResource(id = R.color.color_primary)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_hearth_white),
                 contentDescription = null,
+                tint = Color.White,
                 modifier = Modifier
                     .width(24.dp)
                     .height(24.dp)
-                    //.padding(24.dp)
+                //.padding(24.dp)
             )
         }
-        Surface (
+        Surface(
             shape = RoundedCornerShape(bottomEnd = 2.dp, topEnd = 2.dp),
             modifier = Modifier
                 .width(200.dp)
                 .height(6.dp),
             color = colorResource(id = R.color.color_primary)
 
-        ) {  }
+        ) { }
     }
 }
 
@@ -297,9 +292,35 @@ private fun DogDataColumn(
     }
 }
 
+@Composable
+fun LoadingWheel() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+        CircularProgressIndicator(color = Color.Red)
+    }
+}
 
 @Preview
 @Composable
 fun DogDetailPreview() {
-    DogDetailScreen()
+    val dog = Dog(
+        1L,
+        78,
+        "Pug",
+        "Herding",
+        "amistoso",
+        "20 cm",
+        "20 cm",
+        "https://firebasestorage.googleapis.com/v0/b/perrodex-app.appspot.com/o/dog_details_images%2Fn02086079-pekinese.png?alt=media&token=f3cb4225-6690-42f2-a492-b77fcdeb5ee3",
+        "99",
+        "tranquilo",
+        "",
+        "5 kg",
+        "5 kg",
+        "",
+        "",
+        "",
+        true
+    )
+    DogDetailScreen(dog, onButtonClicked = {})
+    LoadingWheel()
 }
